@@ -1,38 +1,45 @@
-# create-svelte
+# Installation
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Prerequisites
 
-## Creating a project
+Feel free to skip this step if you already have git and node+npm installed on your device.
 
-If you're seeing this, you've probably already done this step. Congrats!
+Install the latest version of [git](https://git-scm.com/) 
+
+Install the latest version of [nodeJS](https://nodejs.org/en) 
+
+## Cloning a local version of UIU Health
+
+First, clone the repository on your local machine.
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+git clone https://github.com/taimur-git/uiu-health.git
 ```
 
-## Developing
+This will create a folder called uiu-health, `cd uiu-health` to continue.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Installing dependencies
+
+Next we have to install all the node modules. This will take a while.
+
+```bash
+npm install
+```
+
+## Initialise Database
+
+```bash
+npm run db:start
+```
+
+If at any point you decide to change the database under `prisma/schema.prisma`, run `npm run update`.
+
+## Development
+
+Runs in port:5172
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+You can preview the database at port:5555 with `npm run db`.

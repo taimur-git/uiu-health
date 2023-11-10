@@ -16,7 +16,7 @@
     "seed": "npx prisma db seed",
     "db": "npx prisma studio",
     "update": "npx prisma db push",
-    "db:start": "npx prisma migrate dev --name init"
+    "db:start": "node scripts/makeEnv.js && npx prisma migrate dev --name init && npx prisma db seed"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
