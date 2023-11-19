@@ -39,22 +39,20 @@ model UserInfo{
   id   Int     @id @default(autoincrement())
   name String
   email String
-  password String
-  role String
+  //password String
   phone String
-  address String
-  city String
-  state String
-  country String
-  pincode String
-  status String
+  studentId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  authid String    @unique
+  authUser  User @relation(fields: [authid], references: [id])
 }
 
 model User {
   id           String    @id @unique
-
+  info          UserInfo?
+  username     String   @unique
   auth_session Session[]
   key          Key[]
 }

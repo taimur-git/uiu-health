@@ -17,11 +17,13 @@ const config = {
 		)
 	],
 	theme: {
-		extend: { preset: [ "gold-nouveau" ] },
+		extend: { preset: [ "skeleton","gold-nouveau","hamlindigo" ] },
 	},
 	plugins: [
 		// 4. Append the Skeleton plugin (after other plugins)
-		skeleton
+		skeleton({
+			themes: { preset: [ "skeleton", "gold-nouveau", "hamlindigo" ] }
+		})
 	]
 } satisfies Config;
 

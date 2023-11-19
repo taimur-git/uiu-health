@@ -1,21 +1,22 @@
-<script>
-	import '../app.postcss';
-	import { AppShell } from '@skeletonlabs/skeleton';
+<script lang="ts">
+	import Socials from '$lib/components/Socials.svelte';
+import '../app.postcss';
+	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
 </script>
 
-<!--slot /-->
-
-
-
-
+<!-- App Shell -->
 <AppShell>
-	<svelte:fragment slot="header">Header</svelte:fragment>
-	<svelte:fragment slot="sidebarLeft">Sidebar Left</svelte:fragment>
-	<!-- (sidebarRight) -->
-	<!-- (pageHeader) -->
-	<!-- Router Slot -->
+	<svelte:fragment slot="header">
+		<!-- App Bar -->
+		<AppBar>
+			<svelte:fragment slot="lead">
+				<strong class="text-xl uppercase h2 font-bold"><a href='/'>UIU Health</a></strong>
+			</svelte:fragment>
+			<svelte:fragment slot="trail">
+				<Socials/>
+			</svelte:fragment>
+		</AppBar>
+	</svelte:fragment>
+	<!-- Page Route Content -->
 	<slot />
-	<!-- ---- / ---- -->
-	<svelte:fragment slot="pageFooter">Page Footer</svelte:fragment>
-	<!-- (footer) -->
 </AppShell>
