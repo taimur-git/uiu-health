@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { auth } from "$lib/server/lucia";
+import { type } from 'os';
 
 export const POST = async ({ request, locals }) => {
     const form = await request.json();
@@ -10,43 +11,43 @@ export const POST = async ({ request, locals }) => {
     const phone = form.phone;
     const studentId = form.studentId;
 
+    const name = form.name;
+    const department = form.department;
+    const dob = form.dob;
+
+    //console.log(form);
     if(typeof username !== 'string' || typeof password !== 'string' || typeof email !== 'string'){
         return json({ message: 'Invalid request' }, { status: 400 });
     }
     try{
+
         const user = await auth.createUser({
-            primaryKey: {
+            key: {
                 providerId: 'username',
-                providerUserId: username,
+                providerUserId: username.toLowerCase(),
                 password: password
             },
             attributes: {
-                username
+                username: username,
+                email: email,
+                phone: phone,
+                studentId: studentId,
+                name: name,
+                department: department,
+                //dob: dob
             }
         });
-        const session = await auth.createSession(user.userId);
+        console.log(user);
+
+        const session = await auth.createSession({
+            userId: user.userId,
+            attributes: {}
+        });
+
+
         locals.auth.setSession(session);
 
-        try{
-            await prisma.userInfo.create({
-                data: {
-                    studentId: studentId,
-                    name: username,
-                    email: email,
-                    phone: phone,
-                    
-                    //username: username,
-                }
-                
-            })
-        } catch (err) { 
-            console.error(err);
-            return json({ message: 'Cannot create user' }, { status: 500 });
-        }
-
         return json({ message: 'User created' }, { status: 201 });
-
-
     }
     catch (err) {
         console.error(err)

@@ -1,7 +1,11 @@
 <script lang="ts">
-	import Socials from '$lib/components/Socials.svelte';
+	import Links from '$lib/components/Links.svelte';
 import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+
+	import type { PageData } from './$types'
+	export let data: PageData;
+
 </script>
 
 <!-- App Shell -->
@@ -13,7 +17,7 @@ import '../app.postcss';
 				<strong class="text-xl uppercase h2 font-bold"><a href='/'>UIU Health</a></strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<Socials/>
+				<Links {data}/>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>

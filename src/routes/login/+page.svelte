@@ -10,7 +10,7 @@
             <label class="label">
                 <span class="text-black">Username</span>
                 <input 
-                class="input variant-form-material"
+                class="input variant-form-material text-black"
                 type="text"  name='username' placeholder="Enter user name..." required />
             </label>
             
@@ -21,7 +21,7 @@
                 name="password"
                 type="password"
                 placeholder="Enter password..."
-                class="input variant-form-material"
+                class="input variant-form-material text-black"
                 />
             </label>
 
@@ -44,5 +44,8 @@
     
     .form button{
         margin-top: 1rem;
+    }
+    input{
+      padding: 0.5rem;
     }
 </style>

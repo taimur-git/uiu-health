@@ -5,17 +5,20 @@
 	import type { document } from "postcss";
   let value:number =0 ;
   let basicInfo = {
-    username: '',
-    email: '',
-    password: '',
-    phone: '',
-    studentId: '',
+    username: 'taimur',
+    email: 'taimur221427@bscse.uiu.ac.bd',
+    password: '123',
+    phone: '123',
+    studentId: '011221427',
+    name: 'Taimur Rahman',
+    department: '011',
+    dob: '1998-12-12',
   };
   
   const handleSignup = async (e: Event) => { 
     e.preventDefault();
     extractStudentID();
-    
+
     const res = await fetch('/api/createUser', {
       method: 'POST',
       headers: {
@@ -44,7 +47,8 @@
     //example: trahman2016@uiu -> 2016
     const match = basicInfo.email.match(/(\d+)/);
     if (match) {
-        basicInfo.studentId = match[0];
+      //011 - BSCSE, 021 - BSEEE, 111 - BBA, 121 - BSECO, 
+        basicInfo.studentId = basicInfo.department + match[0];
     }
     basicInfo.studentId = match ? match[0] : '';
 
@@ -57,15 +61,37 @@
         <form method="POST" class="form">
 
             <label class="label">
-                <span class="text-black">Basic Info</span>
+                <span class="text-black">Username</span>
                 <input 
-                class="input variant-form-material"
+                class="input variant-form-material text-black"
                 type="text"  bind:value={basicInfo.username} name='username' placeholder="Enter user name..." required />
             </label>
-            <input class="input variant-form-material" bind:value={basicInfo.phone} type="text" name="phone" placeholder="Enter your phone number">
-            <input class="input variant-form-material" bind:value={basicInfo.email} type="text" name="email" placeholder="Enter your email">
+
+
+            <span class="text-black">Full Name</span>
+            <input class="input variant-form-material text-black" bind:value={basicInfo.name} type="text" name="name" placeholder="Enter your full name">
+            <span class="text-black">Phone</span>
+            <input class="input variant-form-material text-black" bind:value={basicInfo.phone} type="text" name="phone" placeholder="Enter your phone number">
+            <span class="text-black">Email</span>
+            <input class="input variant-form-material text-black" bind:value={basicInfo.email} type="text" name="email" placeholder="Enter your email">
+            <span class="text-black">Department</span>
             <!--input type="hidden" name="studentId" bind:value={basicInfo.studentId}-->
-            
+            <select bind:value={basicInfo.department} class="select variant-form-material text-black">
+                <option value="011">BSCSE</option>
+                <option value="021">BSEEE</option>
+                <option value="111">BBA</option>
+                <option value="121">BSECO</option>
+                <option value="012">MSCSE</option>
+                <option value="112">MBA</option>
+                <option value="125">MDS</option>
+                <option value="115">MIHRM</option>
+                <option value="124">MSECO</option>
+                <option value="031">BSCE</option>
+                <option value="211">BSSEDS</option>
+
+            </select>
+            <span class="text-black">Date of Birth</span>
+            <input type="date" bind:value={basicInfo.dob} class="select variant-form-material text-black">
             <label class="label">
                 <span class="text-black">Password</span>
                 <input 
@@ -74,7 +100,7 @@
                 name="password"
                 type="password"
                 placeholder="Enter password..."
-                class="input variant-form-material"
+                class="input variant-form-material text-black"
                 />
             </label>
 
@@ -97,5 +123,8 @@
     
     .form button{
         margin-top: 1rem;
+    }
+    input{
+      padding: 0.5rem;
     }
 </style>

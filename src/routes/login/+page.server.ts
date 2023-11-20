@@ -6,7 +6,7 @@ import type { Actions, PageServerLoad } from "./$types";
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.auth.validate()
     if (session) {
-        throw redirect(302, '/home')
+        throw redirect(302, '/')
     }  
 }
 
@@ -19,25 +19,16 @@ export const actions: Actions = {
 		if (typeof username !== "string" || typeof password !== "string")
 			return fail(400);
 		try {
-			const key = await auth.useKey("username", username, password);
-			const session = await auth.createSession(key.userId);
+			const key = await auth.useKey("username", username.toLowerCase(), password);
+			const session = await auth.createSession({
+				userId: key.userId,
+				attributes: {}
+			});
 			locals.auth.setSession(session);
             //userauthentication
-            await prisma.user.update({
-                where: { id: key.userId },
-                data: { 
-                    lastLogin: new Date(),
-                    online: true,
-                 }
-                 
-            })
-            //userinfo
-            let user = await prisma.user.findUnique({
-                where: { id: key.userId },
-
-            });
-            console.log(user?.name + " logged in at " + user?.lastLogin);
+            console.log("successfully logged in");
 		} catch {
+            console.log("failed to login");
 			// invalid username/password
             return fail(400, { message: 'Could not login user' });
 		}

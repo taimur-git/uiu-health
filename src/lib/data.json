@@ -1,7 +1,7 @@
 [
     {
         "question": "What should I do if I feel unwell or need medical assistance on campus?",
-        "answer": "If you're feeling unwell or require medical assistance, you should contact our on-campus health services or visit the university's medical bay. We have healthcare professionals available to help you during regular business hours. In case of emergencies after hours, call [Campus Emergency Contact Number] or visit the nearest hospital"
+        "answer": "If you're feeling unwell or require medical assistance, you should contact our on-campus health services or visit the university's medical bay. We have healthcare professionals available to help you during regular business hours. In case of emergencies after hours, please view our emergency contact information."
     },
     {
         "question" : "How can I schedule an appointment?",
@@ -17,7 +17,11 @@
     },
     {
         "question":"What are the hours of operation?",
-        "answer": "Our office is open from 8:00 AM to 5:00 PM, Saturday through Wednesday. We are closed on weekends and holidays."
+        "answer": "Our office is open from 8:30 AM to 4:30 PM, Saturday through Wednesday. We are closed on weekends and holidays."
+    },
+    {
+        "question":"What should I do if I need to cancel my appointment?",
+        "answer": "If you need to cancel your appointment, please call our office at least 24 hours in advance. If you cancel your appointment less than 24 hours in advance, you will be charged a cancellation fee of BDT 50."
     }
     
 ]

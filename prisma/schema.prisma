@@ -19,14 +19,28 @@ model Receipt{
   bank String
   branch String
   date DateTime
+  appointment Appointment?
+  appointmentId Int?
+}
+
+model Appointment{
+  id    Int     @id @default(autoincrement())
+  user User    @relation(fields: [userId], references: [id])
+  userId String
+  service String //Rx -> prescription, Bp -> blood pressure, Wt -> weight, Fw -> follow up, C -> consultation, E -> emergency, S -> seasonal (asthma), Tp - temperature
+  moneyReceipt Receipt? @relation(fields: [receiptId], references: [si])
+  receiptId Int? @unique
+  diagnosis String
+  prescription String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   
 }
-//healthcare register
-model Register{
-  si    Int     @id @default(autoincrement())
-//  patient Patient @relation(fields: [patientId], references: [id])
-  patientId Int
 
+model Service{
+  id   Int     @id @default(autoincrement())
+  alias String 
+  name String
 }
 
 model Faq{
@@ -35,26 +49,26 @@ model Faq{
   answer String
 }
 
-model UserInfo{
-  id   Int     @id @default(autoincrement())
-  name String
-  email String
-  //password String
-  phone String
-  studentId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  authid String    @unique
-  authUser  User @relation(fields: [authid], references: [id])
-}
-
 model User {
+  //for authentication
   id           String    @id @unique
-  info          UserInfo?
   username     String   @unique
   auth_session Session[]
   key          Key[]
+  //userinfo - attributes
+  
+  email String
+  phone String
+  studentId String @unique
+
+  name String?
+  department String?
+  dob DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointments Appointment[]
 }
 
 model Session {
