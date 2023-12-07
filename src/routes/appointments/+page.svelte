@@ -25,27 +25,18 @@
 		// Calculate the end time by adding 30 minutes to the start time
 		let endTime = new Date(new Date(startTime).getTime() + 30 * 60000).toISOString(); // 30 minutes in milliseconds
 		let serviceName = serviceNames[appointment.service];
+		let studentName = appointment.user.name;
+		let studentID = appointment.user.studentId;
+		let title = studentID + ' ' + studentName + ' - ' + serviceName || appointment.service;
 		return {
-			title: serviceName || appointment.service,
+			id: appointment.id,
+			title: title,
 			start: startTime,
 			end: endTime
 		};
 	});
 </script>
 
-<p>Student ID: {data?.userInfo?.studentId}</p>
-<p>Username: {data?.userInfo?.username}</p>
-<p>Email: {data?.userInfo?.email}</p>
-<p>Phone: {data?.userInfo?.phone}</p>
-
-<a class="btn btn-sm variant-filled-secondary" href="profile/edit">Edit</a>
 <h1 class="text-2xl font-bold mb-2.5">Appointments</h1>
-{#each appointments as appointment}
-	<div class="card">
-		<p class="font-bold">{serviceNames[appointment.service]}</p>
-		<p>Date: {appointment.date}</p>
-		<p>Time: {appointment.time}</p>
-		<!--p>Payment: {appointment.payment}</p-->
-	</div>
-{/each}
+
 <Calendar classevents={classEvents} />

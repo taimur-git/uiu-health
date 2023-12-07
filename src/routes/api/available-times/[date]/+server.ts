@@ -1,15 +1,15 @@
 import { json } from '@sveltejs/kit';
 import prisma from "$lib/server/prisma";
-export const GET = async ({ request, locals , params }) => {
+export const GET = async ({ request, locals, params }) => {
     //const form = await request.json();
     let date = params.date;
-    
+
 
     console.log(date);
 
     //return json({ message: 'something' }, { status: 201 });
-    
-    try{
+
+    try {
         const takenTimeSlots = await prisma.appointment.findMany({
             where: {
                 date: date
@@ -33,15 +33,14 @@ export const GET = async ({ request, locals , params }) => {
             "2:30 PM",
             "3:00 PM",
             "3:30 PM",
-            "4:00 PM",
-            "4:30 PM"
-          ];
+            "4:00 PM"
+        ];
 
         let availableTimeSlots = defaultTimes.filter((time) => {
             return !takenTimeSlots.some((takenTimeSlot) => {
-              return takenTimeSlot.time === time;
+                return takenTimeSlot.time === time;
             });
-          });
+        });
 
 
         return json({ message: availableTimeSlots }, { status: 201 });
@@ -50,5 +49,5 @@ export const GET = async ({ request, locals , params }) => {
         console.error(err)
         return json({ message: 'Error' }, { status: 500 });
     }
-    
+
 }

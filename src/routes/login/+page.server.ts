@@ -4,10 +4,10 @@ import type { Actions, PageServerLoad } from "./$types";
 
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const session = await locals.auth.validate()
-    if (session) {
-        throw redirect(302, '/')
-    }  
+	const session = await locals.auth.validate()
+	if (session) {
+		throw redirect(302, '/')
+	}
 }
 
 export const actions: Actions = {
@@ -25,12 +25,12 @@ export const actions: Actions = {
 				attributes: {}
 			});
 			locals.auth.setSession(session);
-            //userauthentication
-            console.log("successfully logged in");
+			//userauthentication
+			console.log("successfully logged in");
 		} catch {
-            console.log("failed to login");
+			console.log("failed to login");
 			// invalid username/password
-            return fail(400, { message: 'Could not login user' });
+			return fail(400, { message: 'Could not login user' });
 		}
 	}
 };

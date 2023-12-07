@@ -9,8 +9,21 @@ export const load: PageServerLoad = async ({ locals }) => {
     const userInfo = await prisma.user.findUnique({
         where: { id: session.user.userId },
     })
-    console.log(userInfo);
+    const appointments = await prisma.appointment.findMany(
+        {
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                        studentId: true,
+                    }
+                }
+            }
+        }
+    )
+    console.log(appointments);
     return {
         userInfo: userInfo,
+        appointments: appointments,
     };
 };

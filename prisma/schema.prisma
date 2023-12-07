@@ -10,30 +10,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Receipt{
-  si     Int     @id @default(autoincrement())
-  amount Int
+model Receipt {
+  si            Int          @id @default(autoincrement())
+  amount        Int
   amountInWords String
-  from String
-  by String //cash, pay order, bank draft, cheque, DD# 
-  bank String
-  branch String
-  date DateTime
-  appointment Appointment?
+  from          String
+  by            String //cash, pay order, bank draft, cheque, DD# 
+  bank          String
+  branch        String
+  date          DateTime
+  appointment   Appointment?
   appointmentId Int?
 }
 
-model Appointment{
-  id    Int     @id @default(autoincrement())
-  user User    @relation(fields: [userId], references: [id])
-  userId String
-  service String //Rx -> prescription, Bp -> blood pressure, Wt -> weight, Fw -> follow up, C -> consultation, E -> emergency, S -> seasonal (asthma), Tp - temperature
+model Prescription{
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String
+
+  drug    String
+  dosage String
+  frequency String
+  action String
+  additional String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+}
+
+model Appointment {
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String
+  service      String //Rx -> prescription, Bp -> blood pressure, Wt -> weight, Fw -> follow up, C -> consultation, E -> emergency, S -> seasonal (asthma), Tp - temperature
   moneyReceipt Receipt? @relation(fields: [receiptId], references: [si])
-  receiptId Int? @unique
+  receiptId    Int?     @unique
   //diagnosis String
   //prescription String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   date String //date of appointment
   time String //from 8:30am to 4:30pm
@@ -41,38 +56,39 @@ model Appointment{
   updated Boolean @default(false) //so it shows up for user if appointment gets rescheduled
 }
 
-model Service{
-  id   Int     @id @default(autoincrement())
-  alias String 
-  name String
+model Service {
+  id    Int    @id @default(autoincrement())
+  alias String
+  name  String
 }
 
-model Faq{
-  id   Int     @id @default(autoincrement())
+model Faq {
+  id       Int    @id @default(autoincrement())
   question String
-  answer String
+  answer   String
 }
 
 model User {
   //for authentication
   id           String    @id @unique
-  username     String   @unique
+  username     String    @unique
   auth_session Session[]
   key          Key[]
   //userinfo - attributes
-  
-  email String
-  phone String
+
+  email     String
+  phone     String
   studentId String @unique
 
-  name String?
+  name       String?
   department String?
-  dob DateTime?
+  dob        DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   appointments Appointment[]
+  prescriptions Prescription[]
 }
 
 model Session {

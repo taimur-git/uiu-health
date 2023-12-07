@@ -1,5 +1,5 @@
 <script>
-    import map from '$lib/images/map.png';
+	import map from '$lib/images/map.png';
 </script>
 
 <img src={map} alt="map" class="w-full h-full" />

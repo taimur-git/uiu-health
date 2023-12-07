@@ -4,7 +4,7 @@ import { type } from 'os';
 
 export const POST = async ({ request, locals }) => {
     const form = await request.json();
-    
+
     const username = form.username;
     const password = form.password;
     const email = form.email;
@@ -16,10 +16,10 @@ export const POST = async ({ request, locals }) => {
     const dob = form.dob;
 
     //console.log(form);
-    if(typeof username !== 'string' || typeof password !== 'string' || typeof email !== 'string'){
+    if (typeof username !== 'string' || typeof password !== 'string' || typeof email !== 'string') {
         return json({ message: 'Invalid request' }, { status: 400 });
     }
-    try{
+    try {
 
         const user = await auth.createUser({
             key: {
