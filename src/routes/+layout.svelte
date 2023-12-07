@@ -5,14 +5,13 @@ import '../app.postcss';
 
 	import type { PageData } from './$types'
 	export let data: PageData;
-
-</script>
+	</script>
 
 <!-- App Shell -->
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
-		<AppBar>
+		<AppBar class='mb-12'>
 			<svelte:fragment slot="lead">
 				<strong class="text-xl uppercase h2 font-bold"><a href='/'>UIU Health</a></strong>
 			</svelte:fragment>
@@ -22,5 +21,18 @@ import '../app.postcss';
 		</AppBar>
 	</svelte:fragment>
 	<!-- Page Route Content -->
-	<slot />
+
+	
+
+<div class='grid grid-cols-7 gap-4'>
+	<div class=' col-span-1'>
+		
+	</div>
+	<div class='col-span-5'><slot /></div>
+	<div class=' col-span-1'>
+		
+	</div>
+</div>
+	
+	
 </AppShell>

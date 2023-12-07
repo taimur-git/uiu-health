@@ -41,7 +41,7 @@ Nurse (Female)Email : dipurani@admin.uiu.ac.bd
             <article>
                 <p class="text-sm text-token">{item.designation}</p>
                 <p class="text-token">{item.mobile}</p>
-                <p class="text-token">{item.email}</p>
+                <p class="text-token text-xs">{item.email}</p>
             </article>
         </div>
     </div>

@@ -30,11 +30,15 @@ model Appointment{
   service String //Rx -> prescription, Bp -> blood pressure, Wt -> weight, Fw -> follow up, C -> consultation, E -> emergency, S -> seasonal (asthma), Tp - temperature
   moneyReceipt Receipt? @relation(fields: [receiptId], references: [si])
   receiptId Int? @unique
-  diagnosis String
-  prescription String
+  //diagnosis String
+  //prescription String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
+  date String //date of appointment
+  time String //from 8:30am to 4:30pm
+
+  updated Boolean @default(false) //so it shows up for user if appointment gets rescheduled
 }
 
 model Service{
