@@ -1,4 +1,3 @@
-
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 
@@ -6,23 +5,25 @@
     /**
 	 * @type {any[]}
 	 */
-     export let tableArr= [
-        {
-            drug: 'Paracetamol',
-            dosage: '500mg',
-            frequency: '3 times a day'
-        },
-        {
-            drug: 'Ibuprofen',
-            dosage: '200mg',
-            frequency: '2 times a day'
-        }
-     	];
+     export let value= [
+		{
+        
+			drug: 'Paracetamol',
+			dosage: '100',
+			frequency: 'every sunday',
+		},
+		{
+        
+			drug: 'Ritalin',
+			dosage: '40',
+			frequency: '2 per week',
+		}
+	];
     let input = {
         drug: '',
         dosage: '',
         frequency: '',
-    };
+    }
      let tableHead =  ['Drug', 'Dosage (mg)', 'Frequency', 'Action'];
 
      
@@ -65,7 +66,7 @@
         let drug = row.cells[0].children[0].value;
         let dosage = row.cells[1].children[0].value;
         let frequency = row.cells[2].children[0].value;
-        tableArr[i] = {drug, dosage, frequency};
+        value[i] = {drug, dosage, frequency};
         //replace the input fields with the data
         row.cells[0].innerHTML = drug;
         row.cells[1].innerHTML = dosage;
@@ -83,7 +84,7 @@
         let dosage = input.dosage;
         let frequency = input.frequency;
         //add the values to the tableArr
-        tableArr.push({drug, dosage, frequency});
+        value.push({drug, dosage, frequency});
         //update the table
         //get the table
         let table = document.querySelector('table');
@@ -100,7 +101,7 @@
         drugCell.innerText = drug;
         dosageCell.innerText = dosage;
         frequencyCell.innerText = frequency;
-        actionCell.innerHTML = `<button onclick='editDrug(`+(tableArr.length-1)+`)'>Edit</button>`;
+        actionCell.innerHTML = `<button onclick='editDrug(`+(value.length-1)+`)'>Edit</button>`;
         //add the cells to the row
         row.appendChild(drugCell);
         row.appendChild(dosageCell);
@@ -135,9 +136,9 @@
             console.log({drug, dosage, frequency});
             tableData.push({drug, dosage, frequency});
         }
-        //tableArr = tableData;
-        console.log(tableData);
-        return tableData;
+        value = tableData;
+        //console.log(tableData);
+        //return tableData;
     
     }
 </script>
@@ -156,7 +157,7 @@
 		</thead>
 		<tbody>
 
-			{#each tableArr as row, i}
+			{#each value as row, i}
 				<tr>
 					<td>{row.drug}</td>
                     <td>{row.dosage}</td>
@@ -168,13 +169,13 @@
 		<tfoot>
 			<tr>
 				<td>
-                    <input type="text" name="drug" id="drug" bind:value={input.drug} placeholder="Drug name">
+                    <input type="text" name="drug" id="drug" placeholder="Drug name" bind:value={input.drug}>
                 </td>
                 <td>
-                    <input type="text" name="dosage" id="dosage" bind:value={input.dosage} placeholder="Dosage (mg)">
+                    <input type="text" name="dosage" id="dosage" placeholder="Dosage" bind:value={input.dosage}>
                 </td>
                 <td>
-                    <input type="text" name="frequency" id="frequency" bind:value={input.frequency} placeholder="Frequency">
+                    <input type="text" name="frequency" id="frequency" placeholder="Frequency" bind:value={input.frequency}>
                 </td>
                 <td>
                     <button on:click={addDrug}>Add</button>
@@ -182,5 +183,4 @@
 			</tr>
 		</tfoot>
 	</table>
-    <button on:click={readTable}>Debug</button>
 </div>
