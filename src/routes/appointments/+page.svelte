@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Calendar from '$lib/components/Calendar.svelte';
+	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 
 	import type { PageData } from './$types';
+	import { goto } from '$app/navigation';
+	import RescheduleModal from '$lib/components/RescheduleModal.svelte';
 
 	export let data: PageData;
 	let appointments = data.appointments;
@@ -35,8 +38,118 @@
 			end: endTime
 		};
 	});
+
+	function handleEventClick(e: CustomEvent) {
+		let action = e.detail.action;
+		let id = e.detail.id;
+		if (action === 'cancel') {
+			console.log('cancel appointment id: ' + id);
+			cancelAppointment(id);
+		} else if (action === 'reschedule') {
+			console.log('reschedule appointment id: ' + id);
+			//goto('/appointment/' + id);
+			//openModal(id);
+		}
+	}
+
+	function updateTime(e: CustomEvent) {
+		let id = e.detail.id;
+		let start = e.detail.start;
+		let day = e.detail.day;
+		console.log('update appointment id: ' + id);
+		console.log('update appointment start: ' + start);
+		//only works if it isnt friday or thursday
+		if (day != 'Thursday' && day != 'Friday') {
+			updateAppointment(id, start);
+		}
+	}
+
+	//im getting the available times from data.availableTimes
+	//show this in front end
+
+	let availableTimes = data.availableTimes;
+
+	const cancelAppointment = async (id: string) => {
+		try {
+			const res = await fetch('/api/appointment/' + id, {
+				method: 'DELETE'
+			});
+			const data = await res.json();
+			console.log(data);
+			if (data.message === 'something') {
+				goto('/appointments');
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const updateAppointment = async (id: string, start: string) => {
+		try {
+			const res = await fetch('/api/appointment/' + id, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ start: formatTime(start) })
+			});
+			const data = await res.json();
+			console.log(data);
+			if (data.message === 'something') {
+				goto('/appointments');
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	function formatTime(inputDateString: string) {
+		const date = new Date(inputDateString);
+
+		// Get the hours and minutes from the date
+		const hours = date.getHours();
+		const minutes = date.getMinutes();
+
+		// Convert the 24-hour format to 12-hour format
+		let formattedHours = hours % 12;
+		formattedHours = formattedHours === 0 ? 12 : formattedHours; // Handle midnight (0 hours)
+
+		// Determine if it's AM or PM
+		const period = hours < 12 ? 'AM' : 'PM';
+
+		// Format the minutes to have leading zeros if needed
+		const formattedMinutes = String(minutes).padStart(2, '0');
+
+		// Create the final formatted time string
+		const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
+
+		return formattedTime;
+	}
+
+	function openModal(id: any) {}
 </script>
 
-<h1 class="text-2xl font-bold mb-2.5">Appointments</h1>
+<!--RescheduleModal parent={s}/-->
+<!--Hide available times within an accordion-->
+<Accordion>
+	<AccordionItem>
+		<svelte:fragment slot="summary">
+			<h2 class="text-2xl font-bold mb-2.5">Available Time Slots Today</h2>
+		</svelte:fragment>
+		<svelte:fragment slot="content">
+			{#each availableTimes as time}
+				<div class="flex justify-center">
+					<div class="w-full sm:w-3/5 md:w-1/3">
+						<div class="flex justify-between">
+							<span>{time}</span>
+						</div>
+					</div>
+				</div>
+			{/each}
+		</svelte:fragment>
+	</AccordionItem>
+</Accordion>
 
-<Calendar classevents={classEvents} />
+<h1 class="text-2xl font-bold mb-2.5 pl-4">Appointments</h1>
+
+<Calendar classevents={classEvents} faculty={true} on:buttonClick={handleEventClick} on:dragEnd={updateTime} />

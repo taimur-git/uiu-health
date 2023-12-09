@@ -18,7 +18,7 @@
 	const handleDateChange = async (event) => {
 		const selectedDate = new Date(event.target.value);
 		const selectedDay = selectedDate.getDay();
-
+		//console.log(event.target.value);
 		// Restrict selection for Thursday (4) and Friday (5)
 		if (selectedDay === 4 || selectedDay === 5) {
 			// If the selected date is Thursday or Friday, prevent further action
@@ -63,7 +63,7 @@
 		event.preventDefault();
 		//extractStudentID();
 
-		const res = await fetch('/api/createAppointment', {
+		const res = await fetch('/api/appointment', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import Calendar from '$lib/components/Calendar.svelte';
 
 	import type { PageData } from './$types';
@@ -31,6 +32,34 @@
 			end: endTime
 		};
 	});
+
+
+	function handleEventClick(e: CustomEvent) {
+		let action = e.detail.action;
+		let id = e.detail.id;
+		if (action === 'cancel') {
+			console.log('cancel appointment id: ' + id);
+			cancelAppointment(id);
+
+		} else if (action === 'reschedule') {
+			console.log('reschedule appointment id: ' + id);
+		}
+	}
+
+	const cancelAppointment = async (id: string) => {
+		try {
+			const res = await fetch('/api/appointment/' + id, {
+				method: 'DELETE'
+			});
+			const data = await res.json();
+			console.log(data);
+			if (data.message === 'something') {
+				goto('/profile');
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
 </script>
 
 <p>Student ID: {data?.userInfo?.studentId}</p>
@@ -48,4 +77,4 @@
 		<!--p>Payment: {appointment.payment}</p-->
 	</div>
 {/each}
-<Calendar classevents={classEvents} />
+<Calendar classevents={classEvents} on:buttonClick={handleEventClick}/>

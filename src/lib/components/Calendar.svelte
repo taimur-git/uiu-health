@@ -4,14 +4,24 @@
 	import dayGridPlugin from '@fullcalendar/daygrid';
 	import timeGridPlugin from '@fullcalendar/timegrid';
 	import listPlugin from '@fullcalendar/list';
+	import interactionPlugin from '@fullcalendar/interaction';
 	import { list } from 'postcss';
 	import { onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 	// @ts-ignore
 	let calendarEl;
 
 	export let classevents: Object[] = [];
+	export let faculty: boolean = false;
 
-	console.log(classevents);
+	function rescheduleAppointment(id: string) {
+		//fetch('http://localhost:3000/api/appointments/' + id, {
+		//method: 'PUT'
+		//});
+	}
+
 	onMount(() => {
 		// @ts-ignore
 		const calendar = new Calendar(calendarEl, {
@@ -29,12 +39,75 @@
 				startTime: '08:30', // 8:30 AM
 				endTime: '16:30' // 4:30 PM
 			},
+
 			slotMinTime: '08:30', // 8:30 AM
 			slotMaxTime: '16:30', // 4:30 PM
-			plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
+			plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+			editable: true,
 			events: classevents,
+			eventDurationEditable: false,
+			eventOverlap: false,
+			eventDragStart: function (info) {
+				//remove the tooltip
+				if (document.getElementsByClassName('tooltip').length != 0)
+					document.getElementsByClassName('tooltip')[0].remove();
+				//dispatch('dragStart', {id: info.event.id, start: info.event.start});
+			},
+			eventDrop: function (info) {
+				//remove the tooltip
+				if (document.getElementsByClassName('tooltip').length != 0)
+					document.getElementsByClassName('tooltip')[0].remove();
+				dispatch('dragEnd', { id: info.event.id, start: info.event.start });
+			},
 			eventClick: function (info) {
-				// alert('Event: ' + info.event.id);
+				//create a tooltip which contains "cancel" and "reschedule" buttons
+				var tooltip = document.createElement('div');
+				tooltip.classList.add('tooltip');
+				tooltip.classList.add('tooltiptext');
+
+				//tooltip.innerHTML =
+				//	'<button class="btn btn-sm variant-filled-secondary" type="button" onclick="cancelAppointment('+info.event.id+')>Cancel</button><button class="btn btn-sm variant-filled-secondary" type="button" onclick="rescheduleAppointment('+info.event.id+')>Reschedule</button>';
+				tooltip.innerHTML =
+					'<button class="btn btn-sm variant-filled-secondary" type="button">Cancel</button>';
+				if (faculty) {
+					tooltip.innerHTML +=
+						'<button class="btn btn-sm variant-filled-secondary" type="button">Billing</button>';
+					//add event listener to the "billing" button
+					tooltip.children[1].addEventListener('click', function () {
+						//remove the tooltip
+						tooltip.remove();
+						//remove the event from the calendar
+						calendar.getEventById(info.event.id).remove();
+						let id = info.event.id;
+						const action = 'billing';
+						dispatch('buttonClick', { action, id });
+					});
+				}
+
+				//add tooltip to the DOM only if it doesn't exist
+				//if a different event is clicked, the tooltip will be updated
+				if (document.getElementsByClassName('tooltip').length == 0) {
+					info.el.appendChild(tooltip);
+				} else {
+					document.getElementsByClassName('tooltip')[0].remove();
+					info.el.appendChild(tooltip);
+				}
+
+				//add event listener to the "cancel" button
+				tooltip.children[0].addEventListener('click', function () {
+					//remove the tooltip
+					tooltip.remove();
+					//remove the event from the calendar
+					calendar.getEventById(info.event.id).remove();
+					let id = info.event.id;
+					const action = 'cancel';
+					dispatch('buttonClick', { action, id });
+				});
+
+				//after 5 seconds, remove the tooltip
+				setTimeout(function () {
+					tooltip.remove();
+				}, 5000);
 			}
 		});
 		calendar.render();
