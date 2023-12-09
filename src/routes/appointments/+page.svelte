@@ -45,10 +45,13 @@
 		if (action === 'cancel') {
 			console.log('cancel appointment id: ' + id);
 			cancelAppointment(id);
-		} else if (action === 'reschedule') {
-			console.log('reschedule appointment id: ' + id);
+		} else if (action === 'billing') {
+			console.log('billing: ' + id);
 			//goto('/appointment/' + id);
 			//openModal(id);
+		}
+		else if(action === 'done'){
+			//mark the appointment as "done"
 		}
 	}
 
@@ -91,7 +94,7 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ start: formatTime(start) })
+				body: JSON.stringify({ start: start })
 			});
 			const data = await res.json();
 			console.log(data);
@@ -103,28 +106,7 @@
 		}
 	};
 
-	function formatTime(inputDateString: string) {
-		const date = new Date(inputDateString);
 
-		// Get the hours and minutes from the date
-		const hours = date.getHours();
-		const minutes = date.getMinutes();
-
-		// Convert the 24-hour format to 12-hour format
-		let formattedHours = hours % 12;
-		formattedHours = formattedHours === 0 ? 12 : formattedHours; // Handle midnight (0 hours)
-
-		// Determine if it's AM or PM
-		const period = hours < 12 ? 'AM' : 'PM';
-
-		// Format the minutes to have leading zeros if needed
-		const formattedMinutes = String(minutes).padStart(2, '0');
-
-		// Create the final formatted time string
-		const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
-
-		return formattedTime;
-	}
 
 	function openModal(id: any) {}
 </script>

@@ -82,6 +82,21 @@
 						const action = 'billing';
 						dispatch('buttonClick', { action, id });
 					});
+
+					//add another button "mark as done"
+					tooltip.innerHTML +=
+						'<button class="btn btn-sm variant-filled-secondary" type="button">Mark as Done</button>';
+					//add event listener to the "mark as done" button
+					tooltip.children[2].addEventListener('click', function () {
+						//remove the tooltip
+						tooltip.remove();
+						//remove the event from the calendar
+						calendar.getEventById(info.event.id).remove();
+						let id = info.event.id;
+						const action = 'done';
+						dispatch('buttonClick', { action, id });
+					});
+					
 				}
 
 				//add tooltip to the DOM only if it doesn't exist

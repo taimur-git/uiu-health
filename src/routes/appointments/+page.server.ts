@@ -18,6 +18,9 @@ export const load: PageServerLoad = async ({ locals }) => {
                         studentId: true,
                     }
                 }
+            },
+            where: {
+                updated: false,
             }
         }
     )
