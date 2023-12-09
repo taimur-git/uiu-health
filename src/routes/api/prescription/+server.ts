@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { auth } from "$lib/server/lucia";
 import { type } from 'os';
-
+import prisma from "$lib/server/prisma";
 export const POST = async ({ request, locals }) => {
     const form = await request.json();
 /*
@@ -22,9 +22,18 @@ let returnObj = {
     const arr = form.arr;
   
     try {
+        const id = await prisma.user.findUnique({
+            where: {
+                studentId: studentID
+            },
+            select: {   
+                id: true
+            }
+        });
+        console.log(id + " found");
         const prescription = await prisma.prescription.create({
             data: {
-                studentID: studentID,
+                userId: id,
                 notes: notes,
                 arr: arr,
             }
